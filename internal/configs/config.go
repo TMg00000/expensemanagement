@@ -7,7 +7,7 @@ import (
 
 type Config struct {
 	MONGO_URI    string `envconfig:"MONGO_URI" required:"true"`
-	EXPENSES_COL string `bson:"value"`
+	EXPENSES_COL string `envconfig:"EXPENSES_COL" required:"true"`
 }
 
 var Env Config

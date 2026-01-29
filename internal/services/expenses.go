@@ -1,5 +1,9 @@
 package services
 
+import (
+	"expensemanagement/internal/domain/request"
+)
+
 type Expenses interface {
-	Create()
+	Create(request.Expenses) error
 }

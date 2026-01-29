@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"os"
 
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
@@ -27,25 +26,12 @@ func NewMongoDB(ctx context.Context) (*mongo.Client, error) {
 
 	client, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
-		return nil, fmt.Errorf(resourceserrormessages.CouldNotConnectToDatabase, err)
+		return nil, fmt.Errorf(resourceserrormessages.CouldNotConnectToDatabase)
 	}
 
 	if err := client.Ping(ctx, readpref.Primary()); err != nil {
-		return nil, fmt.Errorf(resourceserrormessages.DatabaseConnectionIsNotStable, err)
+		return nil, fmt.Errorf(resourceserrormessages.DatabaseConnectionIsNotStable)
 	}
 
 	return client, nil
-}
-
-func (col *collection) GetCollection(ctx context.Context, client *mongo.Client) error {
-	settingsCol := client.Database("expensesdb").Collection("settings")
-
-	err := settingsCol.FindOne(ctx, bson.M{
-		"key": "EXPENSES_COLLECTION",
-	}).Decode(&col.Config)
-	if err != nil {
-		return fmt.Errorf(resourceserrormessages.CouldNotFindThisKey, err)
-	}
-
-	return nil
 }

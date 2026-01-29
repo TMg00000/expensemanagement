@@ -7,4 +7,5 @@ const (
 	CouldNotFindThisKey           = "Could not find this key"
 	DatabaseConnectionError       = "Error connecting to the database"
 	EnvironmentConfigInitError    = "Error initializing environment configuration"
+	CouldNotDecodeJson            = "Could not decode JSON"
 )
