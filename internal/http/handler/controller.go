@@ -6,7 +6,7 @@ import (
 	"expensemanagement/internal/domain/resources/resourceserrormessages"
 	"expensemanagement/internal/domain/resources/resourceserrormessagesrepository"
 	"expensemanagement/internal/services"
-	"expensemanagement/internal/validate"
+	"expensemanagement/internal/validation"
 	"net/http"
 )
 
@@ -24,7 +24,7 @@ func (s *ExpensesServices) RegisterExpenses(w http.ResponseWriter, r *http.Reque
 	}
 	defer r.Body.Close()
 
-	validationErrors := validate.Validation(expenses)
+	validationErrors := validation.ListErrorMessages(expenses)
 
 	if len(validationErrors) > 0 {
 		msg, _ := json.MarshalIndent(validationErrors, "", "  ")

@@ -1,4 +1,4 @@
-package validate
+package validation
 
 import (
 	"expensemanagement/internal/domain/request"
@@ -42,7 +42,7 @@ func dateValidation(e request.Expenses, ListError *[]string) {
 	}
 }
 
-func Validation(e request.Expenses) []string {
+func ListErrorMessages(e request.Expenses) []string {
 	var ListError []string
 
 	nameValidation(e, &ListError)
