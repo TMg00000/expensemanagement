@@ -1,92 +1,151 @@
-# Expense Management API 💰
-
-Esta é uma API REST desenvolvida em **Go (Golang)** para o gerenciamento de despesas. A aplicação utiliza **MongoDB** para persistência de dados e segue boas práticas de organização, validação de dados e separação de responsabilidades.
-
 ---
+# Expense Management API
 
-## 🚀 Tecnologias Utilizadas
+Uma API simples e leve para gerenciar despesas pessoais e categorias. Este README é objetivo: descreve instalação, configuração, endpoints principais, autenticação e como rodar testes.
 
-* **Linguagem:** Go (Golang)
-* **Roteamento:** Gorilla Mux
-* **Banco de Dados:** MongoDB (Driver oficial)
-* **Configuração de Ambiente:** godotenv, envconfig
-* **Manipulação de JSON:** encoding/json
+Principais conceitos
+- Usuário: autenticação e identificação para operações.
+- Despesa: valor, data, categoria e descrição.
+- Categoria: agrupa despesas (ex.: Alimentação, Transporte).
 
----
+Funcionalidades
+- CRUD de despesas
+- CRUD de categorias
+- Autenticação (JWT)
+- Paginação e filtros por data, categoria e intervalo de valores
 
-## 🛠️ Instalação e Execução
+Requisitos
+- Node.js >= 16 (ou versão usada no projeto)
+- npm ou yarn
+- Banco de dados (ex.: PostgreSQL, SQLite para desenvolvimento)
 
-1. **Clone o repositório**
+Instalação
+
+1. Clone o repositório
+
+   ```bash
+   git clone https://github.com/TMg00000/expensemanagement.git
+   cd expensemanagement
+   ```
+
+2. Instale dependências
+
+   ```bash
+   npm install
+   # ou
+   yarn install
+   ```
+
+Configuração
+
+- Crie um arquivo .env na raiz seguindo o exemplo (.env.example, se existir) e configure variáveis essenciais:
+  - DATABASE_URL (ex.: postgres://user:pass@localhost:5432/expenses)
+  - JWT_SECRET
+  - PORT (opcional)
+
+Uso (desenvolvimento)
+
 ```bash
-git clone https://github.com/seu-usuario/expensemanagement
-cd expensemanagement
-Certifique-se de que o MongoDB está rodando
+npm run dev
+# ou
+yarn dev
+```
 
-A API espera uma instância local em:
+A API geralmente ficará disponível em http://localhost:3000 (ou porta definida em PORT).
 
-mongodb://localhost:27017
-Configure as variáveis de ambiente
+Endpoints principais
 
-Crie um arquivo .env na raiz do projeto:
+- POST /auth/login
+  - Autentica usuário e retorna token JWT.
+  - Body: { "email": "", "password": "" }
 
-MONGO_URI=mongodb://localhost:27017
-EXPENSES_COL=expenses
-Instale as dependências
+- POST /auth/register
+  - Cria novo usuário.
+  - Body: { "name": "", "email": "", "password": "" }
 
-go mod tidy
-Execute a aplicação
+- GET /expenses
+  - Lista despesas (suporta page, limit, fromDate, toDate, categoryId, minAmount, maxAmount)
+  - Headers: Authorization: Bearer <token>
 
-go run main.go
-A API será iniciada na porta 9437.
+- POST /expenses
+  - Cria uma despesa
+  - Body: { "amount": number, "date": "YYYY-MM-DD", "categoryId": string, "description": string }
+  - Headers: Authorization: Bearer <token>
 
-🛣️ Endpoints da API
-Método	Rota	Descrição
-POST	/expenses	Cria uma nova despesa
-GET	/expenses	Lista todas as despesas
-PUT	/expenses/{id}	Atualiza uma despesa existente
-DELETE	/expenses/{id}	Remove uma despesa por ID
-DELETE	/expenses	Remove todas as despesas
-📦 Estrutura do JSON (Exemplo)
-{
-  "name": "Internet",
-  "description": "Conta mensal de internet",
-  "value": 120.50,
-  "duedate": "2026-02-10T00:00:00Z"
-}
-✅ Regras de Validação
-Name
-Não pode ser vazio
+- GET /expenses/:id
+  - Detalha uma despesa
+  - Headers: Authorization: Bearer <token>
 
-Não pode iniciar ou terminar com espaços
+- PUT /expenses/:id
+  - Atualiza despesa
+  - Headers: Authorization: Bearer <token>
 
-Deve conter entre 3 e 20 caracteres
+- DELETE /expenses/:id
+  - Remove despesa
+  - Headers: Authorization: Bearer <token>
 
-Description
-Não pode iniciar ou terminar com espaços
+- GET /categories
+  - Lista categorias
+  - Headers: Authorization: Bearer <token>
 
-Máximo de 150 caracteres
+- POST /categories
+  - Cria categoria
+  - Body: { "name": "" }
+  - Headers: Authorization: Bearer <token>
 
-Value
-Deve ser maior que 0
+Autenticação
 
-DueDate
-Deve ser maior que ontem
+- A API usa JWT. Inclua o header:
 
-Quando alguma validação falha, a API retorna 400 Bad Request com uma lista de mensagens de erro.
+  ```http
+  Authorization: Bearer <token>
+  ```
 
-🗄️ Banco de Dados
-Database: expensesdb
+Estrutura do projeto (exemplo)
 
-Collection: definida pela variável EXPENSES_COL
+- src/
+  - controllers/
+  - routes/
+  - models/
+  - services/
+  - middleware/
+  - config/
 
-Conexão validada no início da aplicação com Ping
+Testes
 
-📌 Observações Gerais
-Arquitetura em camadas (handler, validation, services e repository)
+- Execute os testes com:
 
-Validações centralizadas antes da persistência
+  ```bash
+  npm test
+  # ou
+  yarn test
+  ```
 
-Mensagens de erro padronizadas
+Scripts úteis
 
-Projeto indicado para estudos, prática com Go e base para evolução
+- npm run dev — modo desenvolvimento
+- npm start — iniciar em produção
+- npm test — rodar testes
 
+Boas práticas
+
+- Use migrations para o banco de dados
+- Versione a API (ex.: /v1/...) se planejar breaking changes
+- Valide entrada (ex.: Joi, Zod)
+
+Contribuição
+
+1. Fork
+2. Crie branch de feature: git checkout -b feature/minha-coisa
+3. Commit e push
+4. Abra PR descrevendo mudanças e testes
+
+Licença
+
+- Adicione aqui a licença do projeto (ex.: MIT).
+
+Contato
+
+- Crie uma issue ou mande mensagem para o mantenedor.
+
+---
