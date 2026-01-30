@@ -2,7 +2,6 @@ package connections
 
 import (
 	"context"
-	"expensemanagement/internal/configs"
 	"expensemanagement/internal/domain/resources/resourceserrormessages"
 	"fmt"
 	"os"
@@ -11,10 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
-
-type collection struct {
-	configs.Config
-}
 
 func NewMongoDB(ctx context.Context) (*mongo.Client, error) {
 	uri := os.Getenv("MONGO_URI")

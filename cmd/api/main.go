@@ -34,6 +34,10 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/expenses", controller.RegisterExpenses).Methods("POST")
+	r.HandleFunc("/expenses", controller.GetAllExpenses).Methods("GET")
+	r.HandleFunc("/expenses/{id}", controller.UpdateExpenses).Methods("PUT")
+	r.HandleFunc("/expenses/{id}", controller.DeleteExpensesById).Methods("DELETE")
+	r.HandleFunc("/expenses", controller.DeleteAllExpenses).Methods("DELETE")
 
 	err := http.ListenAndServe(":9437", r)
 	returnFatalError(err.Error(), err)
